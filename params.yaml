@@ -1,0 +1,75 @@
+TARGET_COLUMN: 'TARGET'
+DATA_PATH: data/UCI_Credit_Card.csv
+set_index: 'ID'
+TEST_SIZE: 0.2
+scoring:
+- neg_root_mean_squared_error
+- r2
+n_iter_search: 3
+verbosity: 2
+cv: 6
+random_state: 123
+
+NUM_COLUMN:
+- LIMIT_BAL
+- AGE
+- AgeBin
+- PAY_0
+- PAY_2
+- PAY_3
+- PAY_4
+- PAY_5
+- PAY_6
+- BILL_AMT1
+- BILL_AMT2
+- BILL_AMT3
+- BILL_AMT4
+- BILL_AMT5
+- BILL_AMT6
+- PAY_AMT1
+- PAY_AMT2
+- PAY_AMT3
+- PAY_AMT4
+- PAY_AMT5
+- PAY_AMT6
+- Closeness_6
+- Closeness_5
+- Closeness_4
+- Closeness_3
+- Closeness_2
+- Closeness_1
+
+CAT_COLUMN:
+- SEX
+- MARRIAGE
+
+LABEL_COLUMN:
+- EDUCATION
+
+TRAIN_COLUMN:
+- OverallQual
+
+PREDICT_COLUMN:
+- OverallQual
+
+PREDICT_COLUMN_TYPE:
+    OverallQual: int
+    GrLivArea: int
+    TotalBsmtSF: int
+    FirstFlrSF: int
+    GarageCars: int
+    GarageArea: int
+    
+X_PATH_TRAIN: output/x_train.pkl
+Y_PATH_TRAIN: output/y_train.pkl
+X_PATH_VALID: output/x_valid.pkl
+Y_PATH_VALID: output/y_valid.pkl
+X_PATH_TEST: output/x_test.pkl
+Y_PATH_TEST: output/y_test.pkl
+DUMP_TRAIN: output/preprocess_data/data/preprocessed_x_train_v1.1.pkl
+DUMP_VALID: output/preprocess_data/data/preprocessed_x_valid_v1.1.pkl
+DUMP_TEST: output/preprocess_data/data/preprocessed_x_test_v1.1.pkl
+DUMP_PREDICT: output/predict/data/preprocessed_x_predict_v1.1.pkl
+MODEL_NAME: output/model/train/model_name_v1.1.pkl
+BEST_MODEL: output/model/train/best_estimator_v1.1.pkl
+TRAIN_LOG: output/model/train/train_log_v1.1.pkl
