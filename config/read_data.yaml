@@ -1,6 +1,5 @@
 file_loc : '../data/UCI_Credit_Card.csv'
-x_col : 'comment_text'
-y_col : 'toxic' 
-stratify : 'toxic'
+target : 'TARGET' 
+stratify : 'TARGET'
 out_path : "../output/"
 test_size : 0.2
