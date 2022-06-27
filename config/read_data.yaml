@@ -1,5 +1,0 @@
-file_loc : '../data/UCI_Credit_Card.csv'
-target : 'TARGET' 
-stratify : 'TARGET'
-out_path : "../output/"
-test_size : 0.2
