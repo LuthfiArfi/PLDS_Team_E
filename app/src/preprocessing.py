@@ -29,6 +29,7 @@ def load_featured_data(params):
         list_of_featured.append(temp)
 
     return list_of_featured
+
 def one_hot_encoder(params,
                     x_cat,
                     state=None):
@@ -87,17 +88,17 @@ def preprocessing(house_variables_feat, params, state=None):
     return df_joined, df_num_normalized[1]
 
 def main_preprocessing(x_featured_list, params):
-    x_train_preprocessed, x_valid_preprocessed, x_test_preprocessed = x_featured_list
-    x_train_normalized, normalizer = preprocessing(x_train_preprocessed, params)
-    x_valid_normalized = preprocessing(x_valid_preprocessed, params, normalizer)
-    x_test_normalized = preprocessing(x_test_preprocessed, params, normalizer)
-    joblib.dump(x_train_normalized, f"{params['out_path']}x_train_normalized.pkl")
-    joblib.dump(x_valid_normalized, f"{params['out_path']}x_valid_normalized.pkl")
-    joblib.dump(x_test_normalized, f"{params['out_path']}x_test_normalized.pkl")
+    x_train_featured, x_valid_featured, x_test_featured = x_featured_list
+    x_train_preprocessed, normalizer = preprocessing(x_train_featured, params)
+    x_valid_preprocessed = preprocessing(x_valid_featured, params, normalizer)
+    x_test_preprocessed = preprocessing(x_test_featured, params, normalizer)
+    joblib.dump(x_train_preprocessed, f"{params['out_path']}x_train_preprocessed.pkl")
+    joblib.dump(x_valid_preprocessed[0], f"{params['out_path']}x_valid_preprocessed.pkl")
+    joblib.dump(x_test_preprocessed[0], f"{params['out_path']}x_test_preprocessed.pkl")
 
-    return x_train_preprocessed, x_valid_preprocessed, x_test_preprocessed
+    return x_train_preprocessed, x_valid_preprocessed[0], x_test_preprocessed[0]
 
 if __name__ == "__main__":
     params_prep = read_yaml(PREPROCESSING_CONFIG_PATH)
     x_featured_list = load_featured_data(params_prep)
-    x_train_pre_proed, x_valid_pre_proed, x_test_pre_proed = main_preprocessing(x_featured_list, params_prep)
+    x_train_preprocessed, x_valid_preprocessed, x_test_preprocessed = main_preprocessing(x_featured_list, params_prep)
