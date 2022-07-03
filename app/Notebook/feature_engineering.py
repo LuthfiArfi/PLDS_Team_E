@@ -26,7 +26,7 @@ def load_split_data(params):
     return x_train, x_valid, x_test
 
 def age_bin(df):
-    df['AgeBin'] = pd.cut(df['AGE'],[20, 25, 30, 35, 40, 50, 60, 80]).cat.codes
+    df['AgeBin'] = pd.cut(df['AGE'],[20, 25, 30, 35, 40, 50, 60, 80], labels=[0,1,2,3,4,5,6])
     return df
 
 def compile_value(df):    
