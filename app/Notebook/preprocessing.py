@@ -1,6 +1,6 @@
 import pandas as pd
 import joblib
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, Normalizer
 from feature_engineering import main_feat as add_feature
 from tqdm import tqdm
 
@@ -39,13 +39,13 @@ def one_hot_encoder(params,
     
     if state == None:
         encoder = OneHotEncoder(sparse=False,handle_unknown='ignore').fit(x_cat)
-        encoded = encoder.transform(x_cat)
+    
         joblib.dump(encoder,
                     params["out_path"]+"onehotencoder.pkl")
     else:
         encoder = joblib.load(params["out_path"]+"onehotencoder.pkl")
-        encoded = encoder.transform(x_cat)
     
+    encoded = encoder.transform(x_cat)
     feat_names = encoder.get_feature_names_out(col)
     encoded = pd.DataFrame(encoded)
     encoded.index = index
@@ -59,15 +59,15 @@ def normalization(params,
     cols = x_all.columns
 
     if state == None:
-        normalizer = StandardScaler().fit(x_all)
-        normalized = normalizer.transform(x_all)
+        normalizer = Normalizer().fit(x_all)
+        
         joblib.dump(normalizer,
                     params["out_path"]+"normalizer.pkl")
     
     else:
         normalizer = joblib.load(params["out_path"]+"normalizer.pkl")
-        normalized = normalizer.transform(x_all)
-
+    
+    normalized = normalizer.transform(x_all)
     normalized = pd.DataFrame(normalized)
     normalized.index = index
     normalized.columns = cols
@@ -79,7 +79,7 @@ def preprocessing(house_variables_feat, params, state=None):
     house_categorical = house_variables_feat[params['CAT_COLUMN']]
     house_label = house_variables_feat[params['LABEL_COLUMN']]
 
-    df_num_normalized = normalization(params, house_numerical)
+    df_num_normalized = normalization(params, house_numerical, state=None)
     
     df_categorical_encoded = one_hot_encoder(params, house_categorical, state=None)
     
