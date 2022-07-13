@@ -1,7 +1,6 @@
 import pandas as pd
 import joblib
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, Normalizer
-from feature_engineering import main_feat as add_feature
 from tqdm import tqdm
 
 tqdm.pandas()
@@ -78,9 +77,9 @@ def preprocessing(house_variables_feat, params, state=None):
     house_categorical = house_variables_feat[params['CAT_COLUMN']]
     house_label = house_variables_feat[params['LABEL_COLUMN']]
 
-    df_num_normalized = normalization(params, house_numerical, state=None)
+    df_num_normalized = normalization(params, house_numerical, state=state)
     
-    df_categorical_encoded = one_hot_encoder(params, house_categorical, state=None)
+    df_categorical_encoded = one_hot_encoder(params, house_categorical, state=state)
     
     df_joined = pd.concat([df_categorical_encoded, house_label, df_num_normalized[0]], axis=1)
     

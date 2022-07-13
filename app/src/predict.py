@@ -1,7 +1,7 @@
 import joblib
 import pandas as pd
 import numpy as np
-from preprocessing import preprocessing
+from preprocessing import preprocessing, one_hot_encoder
 from feature_engineering import create_feat
 
 from utils import read_yaml
@@ -27,7 +27,7 @@ def construct(test_predict, params_prep):
     result = pd.merge(df_ohe, df_normalizer, how="left")
     return result
 
-def predict(prediksian):
+def main_predict(prediksian):
     to_predict_model = model.predict(prediksian) #sek salah
     if to_predict_model == [0]:
         print("Non Deafult")
@@ -44,4 +44,4 @@ if __name__ == "__main__":
             else:
                 data_predict[i] = [input(f"Input {i}: ")]
     to_pred = construct(data_predict, params_prep)
-    predict(to_pred)
+    main_predict(to_pred)
