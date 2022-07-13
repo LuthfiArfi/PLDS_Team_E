@@ -1,7 +1,6 @@
 import pandas as pd
 import joblib
-from sklearn.preprocessing import StandardScaler, OneHotEncoder, Normalizer
-from feature_engineering import main_feat as add_feature
+from sklearn.preprocessing import OneHotEncoder, Normalizer
 from tqdm import tqdm
 
 tqdm.pandas()
@@ -33,7 +32,6 @@ def load_featured_data(params):
 def one_hot_encoder(params,
                     x_cat,
                     state=None):
-    df = x_cat.copy()
     index = x_cat.index
     col = x_cat.columns
     
@@ -42,7 +40,7 @@ def one_hot_encoder(params,
     
         joblib.dump(encoder,
                     params["out_path"]+"onehotencoder.pkl")
-    else:
+    elif state == 'transform':
         encoder = joblib.load(params["out_path"]+"onehotencoder.pkl")
     
     encoded = encoder.transform(x_cat)
@@ -60,18 +58,17 @@ def normalization(params,
 
     if state == None:
         normalizer = Normalizer().fit(x_all)
-        
         joblib.dump(normalizer,
                     params["out_path"]+"normalizer.pkl")
     
-    else:
+    elif state == 'transform':
         normalizer = joblib.load(params["out_path"]+"normalizer.pkl")
     
     normalized = normalizer.transform(x_all)
     normalized = pd.DataFrame(normalized)
     normalized.index = index
     normalized.columns = cols
-    return normalized, normalizer
+    return normalized
 
 def preprocessing(house_variables_feat, params, state=None):
     
@@ -79,26 +76,27 @@ def preprocessing(house_variables_feat, params, state=None):
     house_categorical = house_variables_feat[params['CAT_COLUMN']]
     house_label = house_variables_feat[params['LABEL_COLUMN']]
 
-    df_num_normalized = normalization(params, house_numerical, state=None)
+    df_num_normalized = normalization(params, house_numerical, state=state)
     
-    df_categorical_encoded = one_hot_encoder(params, house_categorical, state=None)
+    df_categorical_encoded = one_hot_encoder(params, house_categorical, state=state)
     
-    df_joined = pd.concat([df_categorical_encoded, house_label, df_num_normalized[0]], axis=1)
+    df_joined = pd.concat([df_categorical_encoded, house_label, df_num_normalized], axis=1)
     
-    return df_joined, df_num_normalized[1]
+    return df_joined
 
 def main_preprocessing(x_featured_list, params):
     x_train_featured, x_valid_featured, x_test_featured = x_featured_list
-    x_train_preprocessed, normalizer = preprocessing(x_train_featured, params)
-    x_valid_preprocessed = preprocessing(x_valid_featured, params, normalizer)
-    x_test_preprocessed = preprocessing(x_test_featured, params, normalizer)
+    x_train_preprocessed = preprocessing(x_train_featured, params, state=None)
+    x_valid_preprocessed = preprocessing(x_valid_featured, params, state='transform')
+    x_test_preprocessed = preprocessing(x_test_featured, params, state='transform')
+    
     joblib.dump(x_train_preprocessed, f"{params['out_path']}x_train_preprocessed.pkl")
-    joblib.dump(x_valid_preprocessed[0], f"{params['out_path']}x_valid_preprocessed.pkl")
-    joblib.dump(x_test_preprocessed[0], f"{params['out_path']}x_test_preprocessed.pkl")
+    joblib.dump(x_valid_preprocessed, f"{params['out_path']}x_valid_preprocessed.pkl")
+    joblib.dump(x_test_preprocessed, f"{params['out_path']}x_test_preprocessed.pkl")
 
-    return x_train_preprocessed, x_valid_preprocessed[0], x_test_preprocessed[0]
+    return x_train_preprocessed, x_valid_preprocessed, x_test_preprocessed
 
 if __name__ == "__main__":
-    params_prep = read_yaml(PREPROCESSING_CONFIG_PATH)
-    x_featured_list = load_featured_data(params_prep)
-    x_train_preprocessed, x_valid_preprocessed, x_test_preprocessed = main_preprocessing(x_featured_list, params_prep)
+    params = read_yaml(PREPROCESSING_CONFIG_PATH)
+    x_featured_list = load_featured_data(params)
+    x_train_preprocessed, x_valid_preprocessed, x_test_preprocessed = main_preprocessing(x_featured_list, params)
