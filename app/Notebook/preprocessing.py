@@ -33,7 +33,6 @@ def load_featured_data(params):
 def one_hot_encoder(params,
                     x_cat,
                     state=None):
-    df = x_cat.copy()
     index = x_cat.index
     col = x_cat.columns
     
