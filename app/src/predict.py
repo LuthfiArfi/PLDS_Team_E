@@ -19,7 +19,7 @@ estimator = joblib.load('../output/best_estimator.pkl')
 def construct(test_predict, params_prep):    
     df_test = pd.DataFrame(test_predict).astype(int)
     feat = create_feat(df_test)
-    df_preproceed = preprocessing(feat, params_prep, state=normalizer)[0]
+    df_preproceed = preprocessing(feat, params_prep, state='transform')
     return df_preproceed
 
 def main_predict(data_predict, model=model, params_prep=params_prep):
@@ -39,4 +39,5 @@ if __name__ == "__main__":
                 data_predict[i].append(input(f"Input {i}: "))
             else:
                 data_predict[i] = [input(f"Input {i}: ")]
-    main_predict(data_predict, model, params_prep)
+    
+    main_predict(data_predict, model=model, params_prep=params_prep)
