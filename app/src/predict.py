@@ -26,9 +26,9 @@ def main_predict(data_predict, model=model, params_prep=params_prep):
     to_pred = construct(data_predict, params_prep)
     prediction = model.predict(to_pred)
     if prediction == [0]:
-        print("Non Deafult")
+        return "non-default"
     else:
-        print("Default")
+        return "default"
 
 if __name__ == "__main__":
     n_data = int(input(f"Input data (enter int value): "))
