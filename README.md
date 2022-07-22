@@ -34,4 +34,5 @@ Date | Milestone | Description
 ## Artefacts
 Dataset: https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset 
 ## References
+![workflow_plds](https://user-images.githubusercontent.com/65161523/180449653-40990757-87fe-4f75-bf1f-9248ea5b97e1.jpg)
 https://www.kaggle.com/code/lucabasa/credit-card-default-a-very-pedagogical-notebook
