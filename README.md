@@ -32,7 +32,9 @@ Date | Milestone | Description
 22-Jul-2022 | Serving Ready | Backend and model image is ready to deploy
 
 ## Artefacts
-Dataset: https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset 
-## References
+Dataset: https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset
+
 ![workflow_plds](https://user-images.githubusercontent.com/65161523/180449653-40990757-87fe-4f75-bf1f-9248ea5b97e1.jpg)
+
+## References
 https://www.kaggle.com/code/lucabasa/credit-card-default-a-very-pedagogical-notebook
