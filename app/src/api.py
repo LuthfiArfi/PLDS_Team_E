@@ -5,27 +5,20 @@ import joblib
 from pydantic import BaseModel
 
 
-PREPROCESSING_CONFIG_PATH = "../config/preprocessing_config.yaml"
+FEATURE_ENGINEERING_CONFIG_PATH = "../config/feature_engineering_config.yaml"
 PREDICT_CONFIG_PATH = "../config/predict_config.yaml"
 
-params_prep = read_yaml(PREPROCESSING_CONFIG_PATH)
-model = joblib.load('../output/model_name.pkl')
+params_prep = read_yaml(FEATURE_ENGINEERING_CONFIG_PATH)
+model = joblib.load('../output/model_name_v2.pkl')
 
 app = FastAPI()
 
 class Item(BaseModel):
-    ID: int
     LIMIT_BAL: int
     SEX: int
     EDUCATION: int
     MARRIAGE: int
     AGE: int
-    PAY_0: int
-    PAY_2: int
-    PAY_3: int
-    PAY_4: int
-    PAY_5: int
-    PAY_6: int
     BILL_AMT1: int
     BILL_AMT2: int
     BILL_AMT3: int
