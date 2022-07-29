@@ -3,8 +3,7 @@ import pandas as pd
 from tqdm import tqdm
 import joblib
 from sklearn.model_selection import RandomizedSearchCV
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.neural_network import MLPClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, roc_auc_score, f1_score, make_scorer
 tqdm.pandas()
 from utils import read_yaml
@@ -23,9 +22,9 @@ def load_fed_data():
     - y_valid(DataFrame): terget of valid set.
     """
 
-    x_train_path = "../output/x_train_preprocessed.pkl"
+    x_train_path = "../output/x_train_normalized.pkl"
     y_train_path = "../output/y_train.pkl"
-    x_valid_path = "../output/x_valid_preprocessed.pkl"
+    x_valid_path = "../output/x_valid_normalized.pkl"
     y_valid_path = "../output/y_valid.pkl"
     x_train = joblib.load(x_train_path)
     y_train = np.ravel(joblib.load(y_train_path))
@@ -37,9 +36,8 @@ def model():
     """
     Function for initiating Random Forest Model
     """
-    base_model = MLPClassifier(random_state=1)
-    param_dist = {'alpha' : [1],
-                  'max_iter': [1000]}
+    base_model = DecisionTreeClassifier(random_state=1)
+    param_dist = {'max_depth': [5]}
 
     return base_model, param_dist
 
@@ -58,6 +56,9 @@ def random_search_cv(model, param, scoring, n_iter, x, y, verbosity=0):
     return random_fit
 
 def classif_report(model_obj, x_test, y_test):
+    """
+    a function to run classification report
+    """
     code2rel = {'0': 'Non-default', '1': 'default'}
     
     pred = model_obj.predict(x_test)
@@ -92,6 +93,9 @@ def fit(x_train, y_train, model, model_param, scoring='f1', n_iter=1, verbosity=
     return model_fitted
 
 def validate(x_valid, y_valid, model_fitted):
+    """
+    a a function to run classification report on data validation
+    """
     pred_model, report_model = classif_report(model_fitted, x_valid, y_valid)
     return report_model, model_fitted
 
@@ -100,8 +104,8 @@ def main_training_model(param_model, x_train, y_train, x_valid, y_valid):
         scoring = make_scorer(f1_score,average='macro')
         model_fitted = fit(x_train, y_train, base_model, param_dist, scoring=scoring, verbosity=0)
         report, model_fitted = validate(x_valid, y_valid, model_fitted)
-        joblib.dump(model_fitted.best_estimator_, '../output/model_name.pkl')
-        joblib.dump(model_fitted.best_params_, '../output/best_estimator.pkl')
+        joblib.dump(model_fitted.best_estimator_, '../output/model_name_v2.pkl')
+        joblib.dump(model_fitted.best_params_, '../output/best_estimator_v2.pkl')
         return report, model_fitted
 
 if __name__ == "__main__":

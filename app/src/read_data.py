@@ -6,6 +6,18 @@ from utils import read_yaml
 LOAD_SPLIT_CONFIG_PATH = "../config/read_data_config.yaml"
 
 def get_stratify_col(y, stratify_col):
+
+    """
+    Splitting x and y variables.
+    
+    Args:
+    - y(DataFrame): DataFrame contains target variables and id
+    - stratify_col(str): column name of the reference column.
+    
+    Returns:
+    - stratification: Dataframe contains column that will be used as stratification reference
+    """
+
     if stratify_col is None:
         stratification = None
     else:
@@ -16,6 +28,17 @@ def get_stratify_col(y, stratify_col):
 def split_in_out_put(df,
                     target_column,
                     set_index = None):
+
+    """
+    Splitting x and y variables.
+    
+    Args:
+    - df(DataFrame): initial input dataframe
+    
+    Returns:
+    - x_col (DataFrame): Dataframe contains x columns and id
+    - y_col (DataFrame): Dataframe contains y columns and id
+    """
 
     #rename the target name
     df = df.rename(columns={'default.payment.next.month': 'TARGET'})
@@ -30,6 +53,20 @@ def run_split_data(x, y,
                     stratify_col=None,
                     TEST_SIZE=0.2
                     ):
+    """
+    Splitting x and y variables.
+    
+    Args:
+    - x(DataFrame): DataFrame contains predictor variables and id
+    - y(DataFrame): DataFrame contains target variables and id
+    - stratify_col(str): column name of the reference column.
+    - TEST_SIZE(float): Size of the test and validation dataset size.
+    
+    Returns:
+    - x_blabla(DataFrame): X variables for train/valid/test dataset
+    - y_blabla(DataFrame): Y variables for train/valid/test dataset
+    """
+
     
     strat_train = get_stratify_col(y, stratify_col)
     x_train, x_test, y_train, y_test = train_test_split(x, y,
